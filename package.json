@@ -1,0 +1,23 @@
+{
+  "name": "project1",
+  "version": "1.0.0",
+  "description": "Start Node.js learning",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PavelMinev/project1.git"
+  },
+  "author": "Minyov Pavel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PavelMinev/project1/issues"
+  },
+  "homepage": "https://github.com/PavelMinev/project1#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
