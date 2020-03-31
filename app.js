@@ -1,8 +1,25 @@
-const http = require('http');
-const routes = require('./routes');
+const path = require('path');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-console.log(routes);
+const app = express();
 
-const server = http.createServer(routes);
+const adminRoutes = require('./routes/admin')
+const shopRoutes = require('./routes/shop');
 
-server.listen(3000);
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/favicon.ico', (req, res, next) => {
+    res.send('No favicon');
+});
+
+app.use('/admin', adminRoutes);
+
+app.use(shopRoutes);
+
+app.use((req, res) => {
+    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
+})
+
+app.listen(3000);
