@@ -13,24 +13,21 @@ exports.getAddProduct = (req, res) => {
 }
 
 exports.postAddProduct = (req, res) => {
-    const product = new Product(req.body.title);
+    const title = req.body.title;
+    const imageUrl = req.body.imageUrl || 'https://cdn.pixabay.com/photo/2016/03/31/20/51/book-1296045_960_720.png';
+    const description = req.body.description;
+    const price = req.body.price;
+    const product = new Product(title, imageUrl, description, price);
     product.save();
     res.redirect('/');
 }
 
-exports.getProducts = (req, res) => {
-    // console.log(adminData.products);
-    // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-    // template engine on:
+exports.getProducts = (req, res, next) => {
     Product.fetchAll(products => {
-        res.render('shop/product-list', { 
+        res.render('admin/products', { 
             prods: products, 
-            docTitle: 'Shop', 
-            path: '/', 
-            hasProducts: products.length > 0,
-            activeShop: true,
-            productCSS: true,
-            // layout: false, // Handlebars special keyword - not to use default layout
+            docTitle: 'Admin Products', 
+            path: '/admin/products',
         });
     });
 }
