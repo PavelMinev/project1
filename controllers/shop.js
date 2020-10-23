@@ -4,7 +4,7 @@ exports.getProducts = (req, res) => {
     // console.log(adminData.products);
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     // template engine on:
-    Product.findAll()
+    Product.fetchAll()
         .then(products => {
             res.render('shop/product-list', { 
                 prods: products, 
@@ -28,7 +28,7 @@ exports.getProduct = (req, res) => {
 }
 
 exports.getIndex = (req, res, next) => {
-    Product.findAll()
+    Product.fetchAll()
         .then(products => {
             res.render('shop/index', { 
                 prods: products, 
