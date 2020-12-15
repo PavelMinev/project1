@@ -16,7 +16,7 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-const adminRoutes = require('./routes/admin')
+const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,10 +28,7 @@ app.use((req, res, next) => {
             req.user = user;
             next();
         })
-        .catch(err => {
-            console.log(err);
-            next();
-        });
+        .catch(err => console.log(err));
 });
 
 app.use('/favicon.ico', (req, res, next) => {
@@ -44,7 +41,10 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 mongoose
-    .connect('mongodb+srv://admin:9650276711_M@shop.ub09e.mongodb.net/shop?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(
+        'mongodb+srv://admin:9650276711_M@shop.ub09e.mongodb.net/shop?retryWrites=true&w=majority',
+        { useNewUrlParser: true, useUnifiedTopology: true }
+    )
     .then(result => {
         console.log('Application is running on http://localhost:3000')
         User.findOne().then(user => {
@@ -59,7 +59,7 @@ mongoose
                 user.save();
             }
         });
-        app.listen(3000)
+        app.listen(3000);
     })
     .catch(err => {
         console.log(err);
