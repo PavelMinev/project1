@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
+const flash = require('connect-flash');
 // // Handlebars template engine
 // const expressHbs = require('express-handlebars');
 
@@ -18,6 +20,8 @@ const store = new MongoDBStore({
     collection: 'sessions',
     // expires: ''
 });
+
+const csrfProtection = csrf();
 
 // // Handlebars
 // app.engine('hbs', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layout', extname: 'hbs'}))
@@ -40,6 +44,8 @@ app.use(
         // cookie: {maxAge: 60 * 60 * 24},
     })
 );
+app.use(csrfProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
     if (!req.session.user) {
@@ -57,6 +63,12 @@ app.use('/favicon.ico', (req, res, next) => {
     res.send('No favicon');
 });
 
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
+})
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
@@ -70,18 +82,18 @@ mongoose
     )
     .then(result => {
         console.log('Application is running on http://localhost:3000')
-        User.findOne().then(user => {
-            if (!user) {
-                const user = new User({
-                    name: 'Paul',
-                    email: 'mpl12@rambler.ru',
-                    cart: {
-                        items: [],
-                    },
-                });
-                user.save();
-            }
-        });
+        // User.findOne().then(user => {
+        //     if (!user) {
+        //         const user = new User({
+        //             name: 'Paul',
+        //             email: 'mpl12@rambler.ru',
+        //             cart: {
+        //                 items: [],
+        //             },
+        //         });
+        //         user.save();
+        //     }
+        // });
         app.listen(3000);
     })
     .catch(err => {
